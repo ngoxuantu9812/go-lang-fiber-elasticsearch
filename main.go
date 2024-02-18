@@ -26,7 +26,6 @@ func main() {
 
 	logging.Config(app)
 
-	logging.CreateLog("Helloo, I'm here hehehe1", logging.LevelInfo)
 	if os.Getenv("STAGE_STATUS") == "dev" {
 		utils.StartServer(app)
 	} else {

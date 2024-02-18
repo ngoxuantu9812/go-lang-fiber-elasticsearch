@@ -41,20 +41,22 @@ func Config(a *fiber.App) {
 
 }
 
-func CreateLog(p string, level string) {
+func CreateLog(p string, level string, data []byte) {
 	message := p
 	ctx := context.Background()
 	logData := map[string]interface{}{
+		"datetime":   time.Now(),
 		"created_at": time.Now().Format("2006-01-02 15:04:05"),
 		"message":    message,
 		"severity":   level,
+		"data":       string(data),
 	}
 	jsonString, err := convertMapToJSON(logData)
 	if err != nil {
 		log.Println("Error converting map to JSON:", err)
 	}
 	req := esapi.IndexRequest{
-		Index:   "articles",
+		Index:   "hrms",
 		Body:    strings.NewReader(jsonString),
 		Refresh: "true",
 	}

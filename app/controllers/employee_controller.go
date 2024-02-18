@@ -2,8 +2,10 @@ package controllers
 
 import (
 	"Hrms/app/models"
+	"Hrms/pkg/logging"
 	"Hrms/pkg/utils"
 	"Hrms/platform/database"
+	"encoding/json"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -110,6 +112,15 @@ func CreateEmployee(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
+	employeeJson, err := json.Marshal(employee)
+	if err != nil {
+		logging.CreateLog("Create Employee Success", logging.LevelInfo, employeeJson)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   utils.ValidatorErrors(err),
+		})
+	}
+	logging.CreateLog("Create Employee Success", logging.LevelInfo, employeeJson)
 
 	return c.JSON(fiber.Map{
 		"error":    false,
